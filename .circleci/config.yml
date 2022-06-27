@@ -6,10 +6,16 @@ jobs:
         steps:
             - checkout
             - run : 
-                name: install linting library
+                name: install linting libraries
                 command: |
                     pip install pylint
                     pip install cfn-lint
+            - run : 
+                name: lint python codes
+                command: |
+                    ls
+                    pylint LambdaPackageGetCurrentPI/lambda_function.py
+                    pylint LambdaPackageUpdateCurrentPI/lambda_function.py
 
 workflows: 
     testflow: 
