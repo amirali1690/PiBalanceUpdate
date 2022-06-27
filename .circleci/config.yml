@@ -45,7 +45,7 @@ jobs:
                 key: ubuntu-cache
                 paths: [zip]
             - persist_to_workspace: 
-                root : .circleci/python_packages
+                root : zip
                 paths:
                     - '*'
     uploadZipsToS3:
