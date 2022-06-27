@@ -34,4 +34,6 @@ workflows:
     testflow: 
         jobs: 
             - lint
-            - zipPythonPackages
+            - zipPythonPackages:
+                requires: 
+                    - lint
