@@ -33,6 +33,16 @@ jobs:
                 command: |
                     sudo apt-get update
                     sudo apt-get -y upgrade
+            - run: 
+                name: install zip
+                command: |
+                    sudo apt-get install zip
+            - run:
+                name: zip packages
+                command: |
+                    zip -r LambdaPackageUpdateCurrentPI.zip LambdaPackageUpdateCurrentPI
+                    zip -r LambdaPackageGetCurrentPI.zip LambdaPackageGetCurrentPI
+
 
 workflows: 
     testflow: 
