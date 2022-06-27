@@ -42,6 +42,11 @@ jobs:
                 command: |
                     zip -r LambdaPackageUpdateCurrentPI.zip LambdaPackageUpdateCurrentPI
                     zip -r LambdaPackageGetCurrentPI.zip LambdaPackageGetCurrentPI
+            - persist_to_workspace: 
+                root : .circleci/zip
+                paths:
+                    - ./LambdaPackageGetCurrentPI.zip
+                    - ./LambdaPackageUpdateCurrentPI.zip
 
 
 workflows: 
