@@ -32,11 +32,7 @@ jobs:
                 name: update packages
                 command: |
                     sudo apt-get update
-                    sudo apt-get -y upgrade
-            - run: 
-                name: install zip
-                command: |
-                    sudo apt-get install zip
+                   # sudo apt-get -y upgrade
             - run:
                 name: zip packages
                 command: |
@@ -45,7 +41,7 @@ jobs:
                     zip -r zip/LambdaPackageGetCurrentPI.zip LambdaPackageGetCurrentPI
             - save_cache:
                 key: ubuntu-cache
-                paths: [/]
+                paths: [zip]
             - persist_to_workspace: 
                 root : .circleci/zip
                 paths:
