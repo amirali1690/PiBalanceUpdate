@@ -1,0 +1,192 @@
+{
+    "AWSTemplateFormatVersion" : "2010-09-09",
+    "Description"  : "This stack will create 2 SQS Queues and 2 Lambda function to get data from PI RDS send it to a queue to get polled by on-premise server, and poll the data from a queue that receives message from on-premise server.",
+
+    "Parameters"  : {
+        "VPCID" : {
+            "Type" : "AWS::EC2::VPC::Id",
+            "Description" : "The VPC ID that includes the security groups in the ExistingSecurityGroups parameter."
+        }
+    },
+
+    "Resources" : {
+        "PiCurrent": {
+            "Type" : "AWS::SQS::Queue",
+            "Properties"  : {
+                "QueueName"  : "PiCurrent"
+            }
+        },
+        "PiBalance": {
+            "Type" : "AWS::SQS::Queue",
+            "Properties"  : {
+                "QueueName"  : "PiBalance"
+            }
+        },
+        "PiMissingInfo" :{
+            "Type" : "AWS::SNS::Topic",
+            "Properties" : {
+                "TopicName" : "PiMissingInfo",
+                "DisplayName" : "Cases with no info on CT"
+            }
+        },
+        "LambdaExecutionRole":{
+            "Type": "AWS::IAM::Role",
+            "Properties" :{
+                "AssumeRolePolicyDocument" : {
+                    "Version" : "2012-10-17",
+                    "Statement" : [
+                        {
+                            "Effect" : "Allow",
+                            "Principal" : {
+                                "Service" : [
+                                    "lambda.amazonaws.com"
+                                ]
+                            },
+                            "Action" : [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                },
+                "Policies" : [
+                    {
+                        "PolicyName" : "lambdaExecutionRole",
+                        "PolicyDocument" : {
+                            "Version"  : "2012-10-17",
+                            "Statement" : [
+                                {
+                                    "Effect" : "Allow",
+                                    "Action" : [
+                                        "ec2:DescribeNetworkInterfaces",
+                                        "ec2:CreateNetworkInterface",
+                                        "ec2:DeleteNetworkInterface",
+                                        "ec2:DescribeInstances",
+                                        "ec2:AttachNetworkInterface",
+                                        "logs:CreateLogGroup",
+                                        "logs:CreateLogStream",
+                                        "logs:PutLogEvents"
+                                    ],
+                                    "Resource":"*"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "PolicyName" : "lambdaSQS",
+                        "PolicyDocument" : {
+                            "Version"  : "2012-10-17",
+                            "Statement" : [
+                                {
+                                    "Effect" : "Allow",
+                                    "Action" : [
+                                        "sqs:*"
+                                    ],
+                                    "Resource": [
+                                        { "Fn::GetAtt":["PiCurrent","Arn"] },
+                                        { "Fn::GetAtt":["PiBalance","Arn"] }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "RoleName" : "LambdaExecRole"
+            }
+        },
+        "PublishCasesToSQS": {
+            "Type" : "AWS::Lambda::Function",
+            "Properties" : {
+                "Code" : {
+                    "S3Bucket" : "generalfilesbackfit",
+                    "S3Key" : "LambdaPackageGetCurrentPI.zip"
+                },
+                "FunctionName" : "PIgetCurrentToSQS",
+                "Layers" : ["arn:aws:lambda:us-west-2:849779278892:layer:pymysql:2"],
+                "PackageType" : "Zip",
+                "Role" : {"Fn::GetAtt":["LambdaExecutionRole","Arn"]},
+                "Runtime" : "python3.8",
+                "Handler" : "lambda_function.lambda_handler",
+                "Timeout" : 30,
+                "VpcConfig" : {
+                    "SecurityGroupIds" : ["sg-0d7cbccb4dcf5ccfb"],
+                    "SubnetIds": ["subnet-027652c27ddc0fe90"]
+                }
+            }
+        },
+        "UpdatePiCase": {
+            "Type" : "AWS::Lambda::Function",
+            "Properties" : {
+                "Code" : {
+                    "S3Bucket" : "generalfilesbackfit",
+                    "S3Key" : "LambdaPackageUpdateCurrentPI.zip"
+                },
+                "FunctionName" : "PIUpdateCurrentFromSQS",
+                "Layers" : ["arn:aws:lambda:us-west-2:849779278892:layer:pymysql:2"],
+                "PackageType" : "Zip",
+                "Role" : {"Fn::GetAtt":["LambdaExecutionRole","Arn"]},
+                "Runtime" : "python3.8",
+                "Handler" : "lambda_function.lambda_handler",
+                "Timeout" : 30,
+                "VpcConfig" : {
+                    "SecurityGroupIds" : ["sg-0d7cbccb4dcf5ccfb"],
+                    "SubnetIds": ["subnet-027652c27ddc0fe90"]
+                }
+            }
+        },
+        "sqsEndpoint": {
+            "Type" : "AWS::EC2::VPCEndpoint",
+            "Properties" : {
+                "ServiceName" :"com.amazonaws.us-west-2.sqs",
+                "SecurityGroupIds" : ["sg-0d7cbccb4dcf5ccfb"],
+                "SubnetIds": ["subnet-027652c27ddc0fe90"],
+                "VpcEndpointType" : "Interface",
+                "PrivateDnsEnabled" : "True",
+                "VpcId" : {"Ref":"VPCID"}
+            }
+        },
+        "EBRuleGetCurrent":{
+            "Type" : "AWS::Events::Rule",
+            "Properties" : {
+                "Description" : "Scheduled Event to invoke PIgetCurrentToSQS lambda function",
+                "Name" : "PIgetCurrentToSQS_invoke",
+                "ScheduleExpression"  : "cron(0 7 * * ? *)",
+                "State" : "ENABLED",
+                "Targets" : [{
+                    "Arn" : {"Fn::GetAtt":["PublishCasesToSQS","Arn"]},
+                    "Id" : "Function1"
+                }]
+            }
+        },
+        "PermissionForEventsToInvokeLambdaGetCases" : {
+            "Type" : "AWS::Lambda::Permission",
+            "Properties" : {
+                "FunctionName" : {"Ref": "PublishCasesToSQS"},
+                "Action" : "lambda:InvokeFunction",
+                "Principal" : "events.amazonaws.com",
+                "SourceArn" : {"Fn::GetAtt" :["EBRuleGetCurrent","Arn"]}
+            }
+        },
+        "EBRuleUploadBalance":{
+            "Type" : "AWS::Events::Rule",
+            "Properties" : {
+                "Description" : "Scheduled Event to invoke UpdatePiCase lambda function",
+                "Name" : "PIuploadBalanceFromSQS_invoke",
+                "ScheduleExpression"  : "cron(0 12 * * ? *)",
+                "State" : "ENABLED",
+                "Targets" : [{
+                    "Arn" : {"Fn::GetAtt":["UpdatePiCase","Arn"]},
+                    "Id" : "Function2"
+                }]
+            }
+        },
+        "PermissionForEventsToInvokeLambdaUploadBalance" : {
+            "Type" : "AWS::Lambda::Permission",
+            "Properties" : {
+                "FunctionName" : {"Ref": "UpdatePiCase"},
+                "Action" : "lambda:InvokeFunction",
+                "Principal" : "events.amazonaws.com",
+                "SourceArn" : {"Fn::GetAtt" :["EBRuleUploadBalance","Arn"]}
+            }
+        }
+    }
+}

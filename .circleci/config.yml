@@ -74,7 +74,8 @@ jobs:
             - run:
                 name: update stack
                 command: |
-                    aws cloudformation deploy --template-file .circleci/files/SQS-LambdaStack.json --stack-name PIBalanceUpdate
+                    ls -la
+                    aws cloudformation deploy --template-file ./SQS-LambdaStack.json --stack-name PIBalanceUpdate
 
 
 
