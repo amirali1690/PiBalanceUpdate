@@ -61,7 +61,8 @@ jobs:
             - run:
                 name: upload zip files to s3
                 command: |
-                    aws s3 ls
+                    aws s3 cp .circleci/python_packages/LambdaPackageGetCurrentPI.zip s3://generalfilesbackfit
+                    aws s3 cp .circleci/python_packages/LambdaPackageUpdateCurrentPI.zip s3://generalfilesbackfit
 
 
 
