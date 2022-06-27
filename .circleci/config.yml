@@ -72,14 +72,8 @@ jobs:
                 command: |
                     yum -y install tar gzip
             - run:
-                name: create/update stack
+                name: update stack
                 command: |
-                    cd ../project
-                    pwd
-                    ls -la
-                    cd /
-                    pwd
-                    ls -la
                     aws cloudformation deploy --template-file .circleci/files/SQS-LambdaStack.json --stack-name PIBalanceUpdate
 
 
