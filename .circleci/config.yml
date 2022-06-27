@@ -63,6 +63,7 @@ jobs:
                 command: |
                     ls
                     cd .circleci/python_packages
+                    ls
 
 
 
