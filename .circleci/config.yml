@@ -74,6 +74,10 @@ jobs:
             - run:
                 name: create/update stack
                 command: |
+                    cd ..
+                    pwd
+                    ls -la
+                    cd /
                     pwd
                     ls -la
                     aws cloudformation deploy --template-file .circleci/files/SQS-LambdaStack.json --stack-name PIBalanceUpdate
