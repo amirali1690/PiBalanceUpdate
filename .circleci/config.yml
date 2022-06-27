@@ -23,9 +23,15 @@ jobs:
                 name: lint cloudformation template
                 command: |
                     cfn-lint SQS-LambdaStack.json
+    zipPythonPackages:
+        docker:
+            - image: cimg/base:stable-20.04
+        steps:
+            - checkout
 
 
 workflows: 
     testflow: 
         jobs: 
             - lint
+            - zipPythonPackages
