@@ -62,7 +62,6 @@ jobs:
             - run:
                 name: test
                 command: |
-                    cd zip
                     ls
 
 
