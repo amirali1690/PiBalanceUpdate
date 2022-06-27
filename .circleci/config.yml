@@ -1,13 +1,20 @@
 version: 2.1
 jobs: 
-    test:
+    lint:
         docker: 
-            - image: cimg/node:17.2.0
+            - image: cimg/python:3.8
         steps:
             - checkout
-            - run : echo "hello world"
+            - run : 
+                name: install linting library
+                command: |
+                    pip install pylint
+                    pip install cfn-lint
+                
+    lint:
+        docker:
 
 workflows: 
     testflow: 
         jobs: 
-            - test
+            - lint
