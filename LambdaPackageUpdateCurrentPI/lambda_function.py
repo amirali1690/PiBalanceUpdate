@@ -52,7 +52,7 @@ def lambda_handler(event, context):
                     QueueUrl = 'https://sqs.us-west-2.amazonaws.com/849779278892/PiBalance',
                     ReceiptHandle= message['ReceiptHandle']
                 )
-
+        # keep polling messages from SQS till there is no more messages left
         response = client.receive_message(
                     QueueUrl = 'https://sqs.us-west-2.amazonaws.com/849779278892/PiBalance',
                     AttributeNames=['All'],
