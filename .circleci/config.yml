@@ -59,11 +59,9 @@ jobs:
             - attach_workspace: 
                 at: .circleci/python_packages
             - run:
-                name: test
+                name: upload zip files to s3
                 command: |
-                    ls
-                    cd .circleci/python_packages
-                    ls
+                    aws s3 ls
 
 
 
