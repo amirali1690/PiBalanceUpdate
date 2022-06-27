@@ -14,8 +14,8 @@ jobs:
                 name: lint python codes
                 command: |
                     ls
-                    pylint --variable-naming-style camel_case LambdaPackageGetCurrentPI/lambda_function.py
-                    pylint --variable-naming-style camel_case LambdaPackageUpdateCurrentPI/lambda_function.py
+                    pylint --variable-naming-style camelCase LambdaPackageGetCurrentPI/lambda_function.py
+                    pylint --variable-naming-style camelCase LambdaPackageUpdateCurrentPI/lambda_function.py
 
 workflows: 
     testflow: 
