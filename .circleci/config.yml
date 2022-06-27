@@ -67,6 +67,7 @@ jobs:
         docker:
             - image: amazon/aws-cli
         steps:
+            - checkout
             - run:
                 name: tar gzip
                 command: |
@@ -76,7 +77,7 @@ jobs:
                 command: |
                     ls -la
                     pwd
-                    aws cloudformation deploy --template-file .circleci/SQS-LambdaStack.json --stack-name PIBalanceUpdate
+                    aws cloudformation deploy --template-file SQS-LambdaStack.json --stack-name PIBalanceUpdate
 
 
 
