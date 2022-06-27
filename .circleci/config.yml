@@ -45,10 +45,10 @@ jobs:
                 key: ubuntu-cache
                 paths: [zip]
             - persist_to_workspace: 
-                root : .circleci/zip
+                root : zip
                 paths:
-                    - ./zip/LambdaPackageGetCurrentPI.zip
-                    - ./zip/LambdaPackageUpdateCurrentPI.zip
+                    - LambdaPackageGetCurrentPI.zip
+                    - LambdaPackageUpdateCurrentPI.zip
 
 
 workflows: 
