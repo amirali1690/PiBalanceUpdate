@@ -1,0 +1,9 @@
+version: 2.1
+jobs: 
+	test:
+		docker: 
+			- image: cimg/node:17.2.0
+
+		steps:
+			- checkout
+			- run : echo "hello world"
