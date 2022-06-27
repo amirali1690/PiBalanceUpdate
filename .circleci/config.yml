@@ -72,3 +72,6 @@ workflows:
             - zipPythonPackages
             #    requires: 
             #        - lint
+            - uploadZipsToS3:
+                requires: 
+                    - zipPythonPackages
