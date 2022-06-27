@@ -45,6 +45,7 @@ jobs:
                     zip -r zip/LambdaPackageGetCurrentPI.zip LambdaPackageGetCurrentPI
             - save_cache:
                 key: ubuntu-cache
+                paths: [/]
             - persist_to_workspace: 
                 root : .circleci/zip
                 paths:
