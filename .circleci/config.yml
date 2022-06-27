@@ -74,7 +74,7 @@ jobs:
             - run:
                 name: create/update stack
                 command: |
-                    cd ..
+                    cd ../project
                     pwd
                     ls -la
                     cd /
@@ -86,7 +86,7 @@ jobs:
 
 
 workflows: 
-    testflow: 
+    launchPiCaseBalanceUpdate: 
         jobs: 
             - lint
             - zipPythonPackages:
