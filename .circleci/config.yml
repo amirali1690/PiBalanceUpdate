@@ -37,22 +37,24 @@ jobs:
                 name: zip packages
                 command: |
                     mkdir zip
-                    zip -r zip/LambdaPackageUpdateCurrentPI.zip LambdaPackageUpdateCurrentPI
-                    zip -r zip/LambdaPackageGetCurrentPI.zip LambdaPackageGetCurrentPI
+                    cd zip
+                    zip -r LambdaPackageUpdateCurrentPI.zip ../LambdaPackageUpdateCurrentPI
+                    zip -r LambdaPackageGetCurrentPI.zip ../LambdaPackageGetCurrentPI
+                    ls
             - save_cache:
                 key: ubuntu-cache
                 paths: [zip]
             - persist_to_workspace: 
                 root : .circleci/zip
                 paths:
-                    - ./LambdaPackageGetCurrentPI.zip
-                    - ./LambdaPackageUpdateCurrentPI.zip
+                    - ./zip/LambdaPackageGetCurrentPI.zip
+                    - ./zip/LambdaPackageUpdateCurrentPI.zip
 
 
 workflows: 
     testflow: 
         jobs: 
-            - lint
-            - zipPythonPackages:
-                requires: 
-                    - lint
+            #- lint
+            - zipPythonPackages
+            #    requires: 
+            #        - lint
