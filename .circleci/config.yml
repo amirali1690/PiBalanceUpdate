@@ -17,9 +17,13 @@ jobs:
             - run : 
                 name: lint python codes
                 command: |
-                    ls
                     pylint --variable-naming-style camelCase LambdaPackageGetCurrentPI/lambda_function.py
                     pylint --variable-naming-style camelCase LambdaPackageUpdateCurrentPI/lambda_function.py
+            - run: 
+                name: lint cloudformation template
+                command: |
+                    cfn-lint SQS-LambdaStack.json
+
 
 workflows: 
     testflow: 
