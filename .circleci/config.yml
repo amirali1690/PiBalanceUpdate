@@ -40,7 +40,7 @@ jobs:
                     cd zip
                     zip -r LambdaPackageUpdateCurrentPI.zip ../LambdaPackageUpdateCurrentPI
                     zip -r LambdaPackageGetCurrentPI.zip ../LambdaPackageGetCurrentPI
-                    ls
+                    ls -l
             - save_cache:
                 key: ubuntu-cache
                 paths: [zip]
@@ -49,6 +49,20 @@ jobs:
                 paths:
                     - LambdaPackageGetCurrentPI.zip
                     - LambdaPackageUpdateCurrentPI.zip
+    uploadZipsToS3:
+        docker:
+            - image: amazon/aws-cli
+        steps:
+            - attach_to_workspace: 
+                at: /zip
+            - run:
+                name: test
+                command: |
+                    cd zip
+                    ls
+
+
+
 
 
 workflows: 
