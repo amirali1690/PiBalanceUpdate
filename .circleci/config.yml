@@ -45,10 +45,9 @@ jobs:
                 key: ubuntu-cache
                 paths: [zip]
             - persist_to_workspace: 
-                root : zip
+                root : .circleci/python_packages
                 paths:
-                    - LambdaPackageGetCurrentPI.zip
-                    - LambdaPackageUpdateCurrentPI.zip
+                    - '*'
     uploadZipsToS3:
         docker:
             - image: amazon/aws-cli
@@ -58,11 +57,12 @@ jobs:
                 command: |
                     yum -y install tar gzip
             - attach_workspace: 
-                at: /zip
+                at: .circleci/python_packages
             - run:
                 name: test
                 command: |
                     ls
+                    cd .circleci/python_packages
 
 
 
