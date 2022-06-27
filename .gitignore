@@ -1,0 +1,6 @@
+*.txt
+*.pyc
+*.pem
+__pycache__/
+*/__pycache__/
+*.zip
