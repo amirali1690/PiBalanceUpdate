@@ -53,7 +53,7 @@ jobs:
         docker:
             - image: amazon/aws-cli
         steps:
-            - attach_to_workspace: 
+            - attach_workspace: 
                 at: /zip
             - run:
                 name: test
