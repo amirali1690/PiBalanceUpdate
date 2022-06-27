@@ -40,8 +40,8 @@ jobs:
             - run:
                 name: zip packages
                 command: |
-                    zip -r LambdaPackageUpdateCurrentPI.zip LambdaPackageUpdateCurrentPI
-                    zip -r LambdaPackageGetCurrentPI.zip LambdaPackageGetCurrentPI
+                    zip -r zip/LambdaPackageUpdateCurrentPI.zip LambdaPackageUpdateCurrentPI
+                    zip -r zip/LambdaPackageGetCurrentPI.zip LambdaPackageGetCurrentPI
             - persist_to_workspace: 
                 root : .circleci/zip
                 paths:
