@@ -6,6 +6,10 @@ jobs:
         steps:
             - checkout
             - run : 
+                name : install dependencies
+                command: |
+                    pip install pymysql
+            - run : 
                 name: install linting libraries
                 command: |
                     pip install pylint
