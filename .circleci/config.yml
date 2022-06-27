@@ -10,9 +10,6 @@ jobs:
                 command: |
                     pip install pylint
                     pip install cfn-lint
-                
-    lint:
-        docker:
 
 workflows: 
     testflow: 
