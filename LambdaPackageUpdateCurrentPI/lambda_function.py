@@ -25,8 +25,9 @@ def lambda_handler(event, context):
     cursor =connection.cursor()
     client = boto3.client('sqs',region_name='us-west-2',
                     endpoint_url='https://sqs.us-west-2.amazonaws.com')
+    queueInfo = client.get_queue_url(QueueName='PiBalance')
     response = client.receive_message(
-                        QueueUrl = 'https://sqs.us-west-2.amazonaws.com/849779278892/PiBalance',
+                        QueueUrl = queueInfo['QueueUrl'],
                         AttributeNames=['All'],
                         MaxNumberOfMessages = 10
                     )
@@ -50,12 +51,12 @@ def lambda_handler(event, context):
                 cursor.execute(sql2,(lastvisit,initialvisit,caseId))
                 connection.commit()
                 client.delete_message(
-                    QueueUrl = 'https://sqs.us-west-2.amazonaws.com/849779278892/PiBalance',
+                    QueueUrl = queueInfo['QueueUrl'],
                     ReceiptHandle= message['ReceiptHandle']
                 )
         # keep polling messages from SQS till there is no more messages left
         response = client.receive_message(
-                    QueueUrl = 'https://sqs.us-west-2.amazonaws.com/849779278892/PiBalance',
+                    QueueUrl = queueInfo['QueueUrl'],
                     AttributeNames=['All'],
                     MaxNumberOfMessages = 10
                 )
