@@ -42,10 +42,13 @@ jobs:
                 command: |
                     mkdir zip
                     ls -l
-                    zip -r LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip LambdaPackageUpdateCurrentPI
-                    zip -r LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip LambdaPackageGetCurrentPI
-                    cp LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip ./zip
-                    cp LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip ./zip
+                    cd LambdaPackageUpdateCurrentPI
+                    zip -r LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip .
+                    cd ../LambdaPackageGetCurrentPI
+                    zip -r LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip .
+                    cd ..
+                    cp LambdaPackageUpdateCurrentPI/LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip ./zip
+                    cp LambdaPackageGetCurrentPI/LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip ./zip
             - save_cache:
                 key: ubuntu-cache
                 paths: [zip]

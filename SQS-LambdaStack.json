@@ -122,7 +122,7 @@
             "Properties" : {
                 "Code" : {
                     "S3Bucket" : "generalfilesbackfit",
-                    "S3Key" : {"Ref" :"S3KEYFROMSQS"}
+                    "S3Key" : {"Ref" :"S3KEYTOSQS"}
                 },
                 "FunctionName" : "PIgetCurrentToSQS",
                 "Layers" : ["arn:aws:lambda:us-west-2:849779278892:layer:pymysql:2"],
@@ -148,7 +148,7 @@
             "Properties" : {
                 "Code" : {
                     "S3Bucket" : "generalfilesbackfit",
-                    "S3Key" : {"Ref" :"S3KEYTOSQS"}
+                    "S3Key" : {"Ref" :"S3KEYFROMSQS"}
                 },
                 "FunctionName" : "PIUpdateCurrentFromSQS",
                 "Layers" : ["arn:aws:lambda:us-west-2:849779278892:layer:pymysql:2"],
