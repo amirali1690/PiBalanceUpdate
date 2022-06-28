@@ -92,13 +92,13 @@ jobs:
 workflows: 
     launchPiCaseBalanceUpdate: 
         jobs: 
-            - lint
-            - zipPythonPackages:
-                requires: 
-                    - lint
+            #- lint
+            - zipPythonPackages
+            #    requires: 
+            #        - lint
             - uploadZipsToS3:
                 requires: 
                     - zipPythonPackages
-            - createOrUpdateStack:
-                requires:   
-                    - uploadZipsToS3
+            #- createOrUpdateStack:
+            #    requires:   
+            #        - uploadZipsToS3
