@@ -32,7 +32,11 @@ jobs:
                 name: update packages
                 command: |
                     sudo apt-get update
-                   # sudo apt-get -y upgrade
+                    sudo apt-get -y upgrade
+            - run:
+                name: install zip
+                command: |
+                    sudo apt-get install -y zip
             - run:
                 name: zip packages
                 command: |
@@ -41,12 +45,9 @@ jobs:
                     mkdir zip
                     zip -r LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip LambdaPackageUpdateCurrentPI
                     zip -r LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip LambdaPackageGetCurrentPI
-                    zip -r LambdaPackageUpdateCurrentPI.zip LambdaPackageUpdateCurrentPI
-                    zip -r LambdaPackageGetCurrentPI.zip LambdaPackageGetCurrentPI
+                    ls -l
                     cp LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip ./zip
                     cp LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip ./zip
-                    cp LambdaPackageUpdateCurrentPI.zip ./zip
-                    cp LambdaPackageGetCurrentPI.zip ./zip
                     ls -l
             - save_cache:
                 key: ubuntu-cache
