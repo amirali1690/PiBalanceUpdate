@@ -37,16 +37,17 @@ jobs:
                 name: zip packages
                 command: |
                     ls -l
-                    cd LambdaPackageUpdateCurrentPI
                     ls -l
-                    cd ..
                     mkdir zip
-                    cd zip
-                    zip -r LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip ../LambdaPackageUpdateCurrentPI
-                    zip -r LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip ../LambdaPackageGetCurrentPI
-                    zip -r LambdaPackageUpdateCurrentPI.zip ../LambdaPackageUpdateCurrentPI
-                    zip -r LambdaPackageGetCurrentPI.zip ../LambdaPackageGetCurrentPI
+                    zip -r LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip LambdaPackageUpdateCurrentPI
+                    zip -r LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip LambdaPackageGetCurrentPI
+                    zip -r LambdaPackageUpdateCurrentPI.zip LambdaPackageUpdateCurrentPI
+                    zip -r LambdaPackageGetCurrentPI.zip LambdaPackageGetCurrentPI
                     unzip LambdaPackageGetCurrentPI.zip
+                    cp LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip /zip
+                    cp LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip /zip
+                    cp LambdaPackageUpdateCurrentPI.zip.zip /zip
+                    cp LambdaPackageGetCurrentPI.zip /zip
                     ls -l
             - save_cache:
                 key: ubuntu-cache
