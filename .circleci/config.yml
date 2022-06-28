@@ -77,7 +77,8 @@ jobs:
                 command: |
                     S3KEYTOSQSENV=LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip
                     S3KEYFROMSQSENV=LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip
-                    printenv S3KEYTOSQSENV S3KEYFROMSQSENV
+                    echo $S3KEYTOSQSENV
+                    echo $S3KEYFROMSQSENV
 
             - run:
                 name: update stack
