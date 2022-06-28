@@ -40,12 +40,10 @@ jobs:
             - run:
                 name: zip packages
                 command: |
-                    ls -l
-                    ls -l
                     mkdir zip
+                    zip test.zip test.zzz 
                     zip -r LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip LambdaPackageUpdateCurrentPI
                     zip -r LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip LambdaPackageGetCurrentPI
-                    ls -l
                     cp LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip ./zip
                     cp LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip ./zip
                     ls -l
@@ -71,8 +69,6 @@ jobs:
                 command: |
                     aws s3 cp .circleci/python_packages/LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip s3://generalfilesbackfit
                     aws s3 cp .circleci/python_packages/LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip s3://generalfilesbackfit
-                    aws s3 cp .circleci/python_packages/LambdaPackageUpdateCurrentPI.zip s3://generalfilesbackfit
-                    aws s3 cp .circleci/python_packages/LambdaPackageGetCurrentPI.zip s3://generalfilesbackfit
     createOrUpdateStack:
         docker:
             - image: amazon/aws-cli
