@@ -43,7 +43,6 @@ jobs:
                     zip -r LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip LambdaPackageGetCurrentPI
                     zip -r LambdaPackageUpdateCurrentPI.zip LambdaPackageUpdateCurrentPI
                     zip -r LambdaPackageGetCurrentPI.zip LambdaPackageGetCurrentPI
-                    unzip LambdaPackageGetCurrentPI.zip
                     cp LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip /zip
                     cp LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip /zip
                     cp LambdaPackageUpdateCurrentPI.zip.zip /zip
