@@ -6,6 +6,10 @@
         "VPCID" : {
             "Type" : "AWS::EC2::VPC::Id",
             "Description" : "The VPC ID that includes the security groups in the ExistingSecurityGroups parameter."
+        },
+        "RDSHOST" : {
+            "Type" : "String",
+            "Description" : "RDS Host info"
         }
     },
 
@@ -108,7 +112,7 @@
                 "Handler" : "lambda_function.lambda_handler",
                 "Timeout" : 30,
                 "Environment" : {
-                    "Variables" : {"test":"123"}
+                    "Variables" : {"test":"123","RDS_HOST":{"Ref":"RDSHOST"}}
                 },
                 "VpcConfig" : {
                     "SecurityGroupIds" : ["sg-0d7cbccb4dcf5ccfb"],

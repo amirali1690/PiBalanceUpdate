@@ -75,7 +75,7 @@ jobs:
             - run:
                 name: update stack
                 command: |
-                    aws cloudformation deploy --template-file SQS-LambdaStack.json --stack-name PIBalanceUpdate --capabilities CAPABILITY_NAMED_IAM
+                    aws cloudformation deploy --template-file SQS-LambdaStack.json --stack-name PIBalanceUpdate --capabilities CAPABILITY_NAMED_IAM --parameter-overrides RDSHOST=${RDS_HOST}
 
 
 
