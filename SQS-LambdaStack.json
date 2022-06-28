@@ -10,6 +10,18 @@
         "RDSHOST" : {
             "Type" : "String",
             "Description" : "RDS Host info"
+        },
+        "RDSUSER" : {
+            "Type" : "String",
+            "Description" : "RDS User"
+        },
+        "RDSPASSWORD" : {
+            "Type" : "String",
+            "Description" : "RDS Password"
+        },
+        "RDSDB" : {
+            "Type" : "String",
+            "Description" : "RDS DB Name"
         }
     },
 
@@ -112,7 +124,10 @@
                 "Handler" : "lambda_function.lambda_handler",
                 "Timeout" : 30,
                 "Environment" : {
-                    "Variables" : {"test":"123","RDS_HOST":{"Ref":"RDSHOST"}}
+                    "Variables" : {"RDS_HOST":{"Ref":"RDSHOST"},
+                                   "RDS_USER":{"Ref":"RDSUSER"},
+                                   "RDS_PASSWORD":{"Ref":"RDSPASSWORD"},
+                                   "RDS_DB":{"Ref":"RDSDB"}}
                 },
                 "VpcConfig" : {
                     "SecurityGroupIds" : ["sg-0d7cbccb4dcf5ccfb"],
@@ -134,6 +149,12 @@
                 "Runtime" : "python3.8",
                 "Handler" : "lambda_function.lambda_handler",
                 "Timeout" : 30,
+                "Environment" : {
+                    "Variables" : {"RDS_HOST":{"Ref":"RDSHOST"},
+                                   "RDS_USER":{"Ref":"RDSUSER"},
+                                   "RDS_PASSWORD":{"Ref":"RDSPASSWORD"},
+                                   "RDS_DB":{"Ref":"RDSDB"}}
+                },
                 "VpcConfig" : {
                     "SecurityGroupIds" : ["sg-0d7cbccb4dcf5ccfb"],
                     "SubnetIds": ["subnet-027652c27ddc0fe90"]
