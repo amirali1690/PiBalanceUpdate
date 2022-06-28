@@ -88,8 +88,8 @@ jobs:
                      --stack-name PIBalanceUpdate --capabilities CAPABILITY_NAMED_IAM \
                      --parameter-overrides RDSHOST=${RDS_HOST} RDSDB=${RDS_DB} \
                      RDSUSER=${RDS_USER} RDSPASSWORD=${RDS_PASSWORD} \ 
-                     S3KEYTOSQS=${S3KEYTOSQSENV} \
-                     S3KEYFROMSQS=${S3KEYFROMSQSENV}
+                     S3KEYTOSQS=$S3KEYTOSQSENV \
+                     S3KEYFROMSQS=$S3KEYFROMSQSENV
 
 
 
@@ -97,13 +97,13 @@ jobs:
 workflows: 
     launchPiCaseBalanceUpdate: 
         jobs: 
-            - lint
-            - zipPythonPackages:
-                requires: 
-                    - lint
-            - uploadZipsToS3:
-                requires: 
-                    - zipPythonPackages
-            - createOrUpdateStack:
-                requires:   
-                    - uploadZipsToS3
+            #- lint
+            #- zipPythonPackages:
+            #    requires: 
+            #        - lint
+            #- uploadZipsToS3:
+            #    requires: 
+            #        - zipPythonPackages
+            - createOrUpdateStack
+            #    requires:   
+            #        - uploadZipsToS3
