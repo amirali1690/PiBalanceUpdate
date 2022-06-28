@@ -22,6 +22,14 @@
         "RDSDB" : {
             "Type" : "String",
             "Description" : "RDS DB Name"
+        },
+        "S3KEYTOSQS" : {
+            "Type" : "String",
+            "Description" : "zip file key name for PublishCasesToSQS"
+        },
+        "S3KEYFROMSQS" : {
+            "Type" : "String",
+            "Description" : "zip file key name for UpdatePiCase"
         }
     },
 
@@ -114,7 +122,7 @@
             "Properties" : {
                 "Code" : {
                     "S3Bucket" : "generalfilesbackfit",
-                    "S3Key" : "LambdaPackageGetCurrentPI.zip"
+                    "S3Key" : {"Ref" :"S3KEYFROMSQS"}
                 },
                 "FunctionName" : "PIgetCurrentToSQS",
                 "Layers" : ["arn:aws:lambda:us-west-2:849779278892:layer:pymysql:2"],
@@ -140,7 +148,7 @@
             "Properties" : {
                 "Code" : {
                     "S3Bucket" : "generalfilesbackfit",
-                    "S3Key" : "LambdaPackageUpdateCurrentPI.zip"
+                    "S3Key" : {"Ref" :"S3KEYTOSQS"}
                 },
                 "FunctionName" : "PIUpdateCurrentFromSQS",
                 "Layers" : ["arn:aws:lambda:us-west-2:849779278892:layer:pymysql:2"],

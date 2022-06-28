@@ -78,7 +78,9 @@ jobs:
                     aws cloudformation deploy --template-file SQS-LambdaStack.json \
                      --stack-name PIBalanceUpdate --capabilities CAPABILITY_NAMED_IAM \
                      --parameter-overrides RDSHOST=${RDS_HOST} RDSDB=${RDS_DB} \
-                     RDSUSER=${RDS_USER} RDSPASSWORD=${RDS_PASSWORD}
+                     RDSUSER=${RDS_USER} RDSPASSWORD=${RDS_PASSWORD} \ 
+                     S3KEYTOSQS=LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip \
+                     S3KEYFROMSQS=LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip
 
 
 
