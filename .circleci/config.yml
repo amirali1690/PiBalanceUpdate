@@ -75,8 +75,8 @@ jobs:
             - run: 
                 name: create variables
                 command: |
-                    export S3KEYTOSQSENV=LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip
-                    export S3KEYFROMSQSENV=LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip
+                    S3KEYTOSQSENV=LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip
+                    S3KEYFROMSQSENV=LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip
 
             - run:
                 name: update stack
