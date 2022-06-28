@@ -36,7 +36,7 @@ jobs:
             - run:
                 name: zip packages
                 command: |
-                    ls
+                    ls -l
                     mkdir zip
                     cd zip
                     zip -r LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip ../LambdaPackageUpdateCurrentPI
