@@ -32,17 +32,16 @@ jobs:
                 name: update packages
                 command: |
                     sudo apt-get update
-                    sudo apt-get -y upgrade
+                # sudo apt-get -y upgrade
             - run:
                 name: install zip
                 command: |
-                    sudo apt-get install -y zip
+                    zip --version
             - run:
                 name: zip packages
                 command: |
                     mkdir zip
                     ls -l
-                    zip test.zip test.zzz 
                     zip -r LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip LambdaPackageUpdateCurrentPI
                     zip -r LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip LambdaPackageGetCurrentPI
                     cp LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip ./zip
