@@ -40,13 +40,15 @@ jobs:
             - run:
                 name: zip packages
                 command: |
-                    cat /etc/os-release
                     mkdir zip
                     ls -l
                     zip -r LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip LambdaPackageUpdateCurrentPI
                     zip -r LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip LambdaPackageGetCurrentPI
                     cp LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip ./zip
                     cp LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip ./zip
+                    cd zip
+                    ls -l
+                    unzip LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip -d /LambdaPackageGCP
                     ls -l
             - save_cache:
                 key: ubuntu-cache
