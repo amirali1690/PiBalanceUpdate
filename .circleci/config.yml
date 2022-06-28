@@ -46,6 +46,7 @@ jobs:
                     zip -r LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip ../LambdaPackageGetCurrentPI
                     zip -r LambdaPackageUpdateCurrentPI.zip ../LambdaPackageUpdateCurrentPI
                     zip -r LambdaPackageGetCurrentPI.zip ../LambdaPackageGetCurrentPI
+                    unzip LambdaPackageGetCurrentPI.zip
                     ls -l
             - save_cache:
                 key: ubuntu-cache
