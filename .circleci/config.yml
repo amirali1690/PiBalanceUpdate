@@ -48,7 +48,9 @@ jobs:
                     cp LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip ./zip
                     cd zip
                     ls -l
+                    echo 'unzipping'
                     sudo unzip LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip -d /LambdaPackageGCP
+                    echo 'unzipped'
                     ls -l
             - save_cache:
                 key: ubuntu-cache
