@@ -6,6 +6,30 @@
         "VPCID" : {
             "Type" : "AWS::EC2::VPC::Id",
             "Description" : "The VPC ID that includes the security groups in the ExistingSecurityGroups parameter."
+        },
+        "RDSHOST" : {
+            "Type" : "String",
+            "Description" : "RDS Host info"
+        },
+        "RDSUSER" : {
+            "Type" : "String",
+            "Description" : "RDS User"
+        },
+        "RDSPASSWORD" : {
+            "Type" : "String",
+            "Description" : "RDS Password"
+        },
+        "RDSDB" : {
+            "Type" : "String",
+            "Description" : "RDS DB Name"
+        },
+        "S3KEYTOSQS" : {
+            "Type" : "String",
+            "Description" : "zip file key name for PublishCasesToSQS"
+        },
+        "S3KEYFROMSQS" : {
+            "Type" : "String",
+            "Description" : "zip file key name for UpdatePiCase"
         }
     },
 
@@ -98,7 +122,7 @@
             "Properties" : {
                 "Code" : {
                     "S3Bucket" : "generalfilesbackfit",
-                    "S3Key" : "LambdaPackageGetCurrentPI.zip"
+                    "S3Key" : {"Ref" :"S3KEYTOSQS"}
                 },
                 "FunctionName" : "PIgetCurrentToSQS",
                 "Layers" : ["arn:aws:lambda:us-west-2:849779278892:layer:pymysql:2"],
@@ -107,6 +131,12 @@
                 "Runtime" : "python3.8",
                 "Handler" : "lambda_function.lambda_handler",
                 "Timeout" : 30,
+                "Environment" : {
+                    "Variables" : {"RDS_HOST":{"Ref":"RDSHOST"},
+                                   "RDS_USER":{"Ref":"RDSUSER"},
+                                   "RDS_PASSWORD":{"Ref":"RDSPASSWORD"},
+                                   "RDS_DB":{"Ref":"RDSDB"}}
+                },
                 "VpcConfig" : {
                     "SecurityGroupIds" : ["sg-0d7cbccb4dcf5ccfb"],
                     "SubnetIds": ["subnet-027652c27ddc0fe90"]
@@ -118,7 +148,7 @@
             "Properties" : {
                 "Code" : {
                     "S3Bucket" : "generalfilesbackfit",
-                    "S3Key" : "LambdaPackageUpdateCurrentPI.zip"
+                    "S3Key" : {"Ref" :"S3KEYFROMSQS"}
                 },
                 "FunctionName" : "PIUpdateCurrentFromSQS",
                 "Layers" : ["arn:aws:lambda:us-west-2:849779278892:layer:pymysql:2"],
@@ -127,6 +157,12 @@
                 "Runtime" : "python3.8",
                 "Handler" : "lambda_function.lambda_handler",
                 "Timeout" : 30,
+                "Environment" : {
+                    "Variables" : {"RDS_HOST":{"Ref":"RDSHOST"},
+                                   "RDS_USER":{"Ref":"RDSUSER"},
+                                   "RDS_PASSWORD":{"Ref":"RDSPASSWORD"},
+                                   "RDS_DB":{"Ref":"RDSDB"}}
+                },
                 "VpcConfig" : {
                     "SecurityGroupIds" : ["sg-0d7cbccb4dcf5ccfb"],
                     "SubnetIds": ["subnet-027652c27ddc0fe90"]

@@ -42,9 +42,10 @@ def lambda_handler(event, context):
                         '","clinic":"'+case['name']+'"}')
     client = boto3.client('sqs',region_name='us-west-2',
     endpoint_url='https://sqs.us-west-2.amazonaws.com')
+    queueInfo = client.get_queue_url(QueueName='PiCurrent')
     for case in caseList:
         client.send_message(
-                            QueueUrl = 'https://sqs.us-west-2.amazonaws.com/849779278892/PiCurrent',
+                            QueueUrl = queueInfo['QueueUrl'],
                             MessageBody=case
                         )
     return True

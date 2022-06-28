@@ -25,8 +25,9 @@ def lambda_handler(event, context):
     cursor =connection.cursor()
     client = boto3.client('sqs',region_name='us-west-2',
                     endpoint_url='https://sqs.us-west-2.amazonaws.com')
+    queueInfo = client.get_queue_url(QueueName='PiBalance')
     response = client.receive_message(
-                        QueueUrl = 'https://sqs.us-west-2.amazonaws.com/849779278892/PiBalance',
+                        QueueUrl = queueInfo['QueueUrl'],
                         AttributeNames=['All'],
                         MaxNumberOfMessages = 10
                     )
@@ -38,24 +39,23 @@ def lambda_handler(event, context):
             caseId = caseInfo['caseId']
             initialvisit = caseInfo['initialvisit']
             lastvisit = caseInfo['lastvisit']
-            clinics = caseInfo['clinics']
-            for clinic in clinics.keys():
-                if clinics[clinic] is None or clinics[clinic]=='None':
-                    clinics[clinic]='0.00'
+            for clinic in caseInfo['clinics'].keys():
+                if caseInfo['clinics'][clinic] is None or caseInfo['clinics'][clinic]=='None':
+                    caseInfo['clinics'][clinic]='0.00'
                 sql = """UPDATE case_offices CO
                          LEFT JOIN clinics CL ON CL.id=CO.office_id
                          SET CO.balance = %s WHERE CO.case_id=%s AND CL.name=%s"""
                 sql2 = 'UPDATE cases SET dateOfLastOfficeVisit=%s, firstDayDate=%s WHERE id=%s'
-                cursor.execute(sql,(clinics[clinic],caseId,clinic))
+                cursor.execute(sql,(caseInfo['clinics'][clinic],caseId,clinic))
                 cursor.execute(sql2,(lastvisit,initialvisit,caseId))
                 connection.commit()
                 client.delete_message(
-                    QueueUrl = 'https://sqs.us-west-2.amazonaws.com/849779278892/PiBalance',
+                    QueueUrl = queueInfo['QueueUrl'],
                     ReceiptHandle= message['ReceiptHandle']
                 )
         # keep polling messages from SQS till there is no more messages left
-        response = client.receive_message(
-                    QueueUrl = 'https://sqs.us-west-2.amazonaws.com/849779278892/PiBalance',
+        client.receive_message(
+                    QueueUrl = queueInfo['QueueUrl'],
                     AttributeNames=['All'],
                     MaxNumberOfMessages = 10
                 )

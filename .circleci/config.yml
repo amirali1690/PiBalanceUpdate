@@ -32,15 +32,23 @@ jobs:
                 name: update packages
                 command: |
                     sudo apt-get update
-                   # sudo apt-get -y upgrade
+                # sudo apt-get -y upgrade
+            - run:
+                name: install zip
+                command: |
+                    zip --version
             - run:
                 name: zip packages
                 command: |
                     mkdir zip
-                    cd zip
-                    zip -r LambdaPackageUpdateCurrentPI.zip ../LambdaPackageUpdateCurrentPI
-                    zip -r LambdaPackageGetCurrentPI.zip ../LambdaPackageGetCurrentPI
                     ls -l
+                    cd LambdaPackageUpdateCurrentPI
+                    zip -r LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip .
+                    cd ../LambdaPackageGetCurrentPI
+                    zip -r LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip .
+                    cd ..
+                    cp LambdaPackageUpdateCurrentPI/LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip ./zip
+                    cp LambdaPackageGetCurrentPI/LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip ./zip
             - save_cache:
                 key: ubuntu-cache
                 paths: [zip]
@@ -61,8 +69,8 @@ jobs:
             - run:
                 name: upload zip files to s3
                 command: |
-                    aws s3 cp .circleci/python_packages/LambdaPackageGetCurrentPI.zip s3://generalfilesbackfit
-                    aws s3 cp .circleci/python_packages/LambdaPackageUpdateCurrentPI.zip s3://generalfilesbackfit
+                    aws s3 cp .circleci/python_packages/LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip s3://generalfilesbackfit
+                    aws s3 cp .circleci/python_packages/LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip s3://generalfilesbackfit
     createOrUpdateStack:
         docker:
             - image: amazon/aws-cli
@@ -75,7 +83,15 @@ jobs:
             - run:
                 name: update stack
                 command: |
-                    aws cloudformation deploy --template-file SQS-LambdaStack.json --stack-name PIBalanceUpdate
+                    S3KEYTOSQSENV=LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip
+                    S3KEYFROMSQSENV=LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip
+                    aws cloudformation deploy --template-file SQS-LambdaStack.json \
+                     --stack-name PIBalanceUpdate --capabilities CAPABILITY_NAMED_IAM \
+                     --parameter-overrides RDSHOST=${RDS_HOST} RDSDB=${RDS_DB} \
+                     RDSUSER=${RDS_USER} RDSPASSWORD=${RDS_PASSWORD} \
+                     S3KEYTOSQS=$S3KEYTOSQSENV \
+                     S3KEYFROMSQS=$S3KEYFROMSQSENV \
+                     VPCID=${VPC_ID}
 
 
 
