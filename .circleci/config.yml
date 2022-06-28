@@ -38,8 +38,8 @@ jobs:
                 command: |
                     mkdir zip
                     cd zip
-                    zip -r LambdaPackageUpdateCurrentPI.zip ../LambdaPackageUpdateCurrentPI
-                    zip -r LambdaPackageGetCurrentPI.zip ../LambdaPackageGetCurrentPI
+                    zip -r LambdaPackageUpdateCurrentPI-"`date +"%d/%m"`".zip ../LambdaPackageUpdateCurrentPI
+                    zip -r LambdaPackageGetCurrentPI-"`date +"%d/%m"`".zip ../LambdaPackageGetCurrentPI
                     ls -l
             - save_cache:
                 key: ubuntu-cache
@@ -61,8 +61,8 @@ jobs:
             - run:
                 name: upload zip files to s3
                 command: |
-                    aws s3 cp .circleci/python_packages/LambdaPackageGetCurrentPI.zip s3://generalfilesbackfit
-                    aws s3 cp .circleci/python_packages/LambdaPackageUpdateCurrentPI.zip s3://generalfilesbackfit
+                    aws s3 cp .circleci/python_packages/LambdaPackageGetCurrentPI-"`date +"%d/%m"`".zip s3://generalfilesbackfit
+                    aws s3 cp .circleci/python_packages/LambdaPackageUpdateCurrentPI-"`date +"%d/%m"`".zip s3://generalfilesbackfit
     createOrUpdateStack:
         docker:
             - image: amazon/aws-cli
