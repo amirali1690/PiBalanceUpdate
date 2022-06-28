@@ -72,17 +72,11 @@ jobs:
                 name: tar gzip
                 command: |
                     yum -y install tar gzip
-            - run: 
-                name: create variables
-                command: |
-                    S3KEYTOSQSENV=LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip
-                    S3KEYFROMSQSENV=LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip
-                    echo $S3KEYTOSQSENV
-                    echo $S3KEYFROMSQSENV
-
             - run:
                 name: update stack
                 command: |
+                    S3KEYTOSQSENV=LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip
+                    S3KEYFROMSQSENV=LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip
                     echo $S3KEYFROMSQSENV
                     aws cloudformation deploy --template-file SQS-LambdaStack.json \
                      --stack-name PIBalanceUpdate --capabilities CAPABILITY_NAMED_IAM \
