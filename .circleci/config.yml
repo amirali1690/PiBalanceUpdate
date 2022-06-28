@@ -32,12 +32,12 @@ jobs:
                 name: update packages
                 command: |
                     sudo apt-get update
-                    sudo apt-get -y upgrade
+                   # sudo apt-get -y upgrade
             - run:
                 name: zip packages
                 command: |
                     ls -l
-                    cd /LambdaPackageUpdateCurrentPI
+                    cd LambdaPackageUpdateCurrentPI
                     ls -l
                     cd ..
                     mkdir zip
