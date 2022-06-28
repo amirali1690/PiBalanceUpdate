@@ -65,6 +65,8 @@ jobs:
                 command: |
                     aws s3 cp .circleci/python_packages/LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip s3://generalfilesbackfit
                     aws s3 cp .circleci/python_packages/LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip s3://generalfilesbackfit
+                    aws s3 cp .circleci/python_packages/LambdaPackageUpdateCurrentPI.zip s3://generalfilesbackfit
+                    aws s3 cp .circleci/python_packages/LambdaPackageGetCurrentPI.zip s3://generalfilesbackfit
     createOrUpdateStack:
         docker:
             - image: amazon/aws-cli
