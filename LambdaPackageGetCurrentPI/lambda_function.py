@@ -10,6 +10,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 def lambda_handler(event, context):
+    
     """
     gets current pi cases from database and send them to sqs.
     """
