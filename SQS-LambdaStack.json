@@ -202,26 +202,11 @@
                 "SourceArn" : {"Fn::GetAtt" :["EBRuleGetCurrent","Arn"]}
             }
         },
-        "EBRuleUploadBalance":{
-            "Type" : "AWS::Events::Rule",
+        "EventSourceMappingLambda": {
+            "Type" : "AWS::Lambda::EventSourceMapping",
             "Properties" : {
-                "Description" : "Scheduled Event to invoke UpdatePiCase lambda function",
-                "Name" : "PIuploadBalanceFromSQS_invoke",
-                "ScheduleExpression"  : "cron(0 12 * * ? *)",
-                "State" : "ENABLED",
-                "Targets" : [{
-                    "Arn" : {"Fn::GetAtt":["UpdatePiCase","Arn"]},
-                    "Id" : "Function2"
-                }]
-            }
-        },
-        "PermissionForEventsToInvokeLambdaUploadBalance" : {
-            "Type" : "AWS::Lambda::Permission",
-            "Properties" : {
-                "FunctionName" : {"Ref": "UpdatePiCase"},
-                "Action" : "lambda:InvokeFunction",
-                "Principal" : "events.amazonaws.com",
-                "SourceArn" : {"Fn::GetAtt" :["EBRuleUploadBalance","Arn"]}
+                "EventSourceArn":"arn:aws:sqs:us-west-2:849779278892:PiBalance",
+                "FunctionName": {"Ref": "UpdatePiCase"}
             }
         }
     }
