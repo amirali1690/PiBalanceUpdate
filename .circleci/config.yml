@@ -94,8 +94,6 @@ jobs:
                      VPCID=${VPC_ID}
 
 
-
-
 workflows: 
     launchPiCaseBalanceUpdate: 
         jobs: 
