@@ -43,12 +43,12 @@ jobs:
                     mkdir zip
                     ls -l
                     cd LambdaPackageUpdateCurrentPI
-                    zip -r LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip .
+                    zip -r LambdaPackageUpdateCurrentPI-${CIRCLE_WORKFLOW_ID}.zip .
                     cd ../LambdaPackageGetCurrentPI
-                    zip -r LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip .
+                    zip -r LambdaPackageGetCurrentPI-${CIRCLE_WORKFLOW_ID}.zip .
                     cd ..
-                    cp LambdaPackageUpdateCurrentPI/LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip ./zip
-                    cp LambdaPackageGetCurrentPI/LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip ./zip
+                    cp LambdaPackageUpdateCurrentPI/LambdaPackageUpdateCurrentPI-${CIRCLE_WORKFLOW_ID}.zip ./zip
+                    cp LambdaPackageGetCurrentPI/LambdaPackageGetCurrentPI-${CIRCLE_WORKFLOW_ID}.zip ./zip
             - save_cache:
                 key: ubuntu-cache
                 paths: [zip]
@@ -69,8 +69,8 @@ jobs:
             - run:
                 name: upload zip files to s3
                 command: |
-                    aws s3 cp .circleci/python_packages/LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip s3://generalfilesbackfit
-                    aws s3 cp .circleci/python_packages/LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip s3://generalfilesbackfit
+                    aws s3 cp .circleci/python_packages/LambdaPackageGetCurrentPI-${CIRCLE_WORKFLOW_ID}.zip s3://generalfilesbackfit
+                    aws s3 cp .circleci/python_packages/LambdaPackageUpdateCurrentPI-${CIRCLE_WORKFLOW_ID}.zip s3://generalfilesbackfit
     createOrUpdateStack:
         docker:
             - image: amazon/aws-cli
@@ -83,8 +83,8 @@ jobs:
             - run:
                 name: update stack
                 command: |
-                    S3KEYTOSQSENV=LambdaPackageGetCurrentPI-"`date +"%d-%m"`".zip
-                    S3KEYFROMSQSENV=LambdaPackageUpdateCurrentPI-"`date +"%d-%m"`".zip
+                    S3KEYTOSQSENV=LambdaPackageGetCurrentPI-${CIRCLE_WORKFLOW_ID}.zip
+                    S3KEYFROMSQSENV=LambdaPackageUpdateCurrentPI-${CIRCLE_WORKFLOW_ID}.zip
                     aws cloudformation deploy --template-file SQS-LambdaStack.json \
                      --stack-name PIBalanceUpdate --capabilities CAPABILITY_NAMED_IAM \
                      --parameter-overrides RDSHOST=${RDS_HOST} RDSDB=${RDS_DB} \
@@ -92,8 +92,6 @@ jobs:
                      S3KEYTOSQS=$S3KEYTOSQSENV \
                      S3KEYFROMSQS=$S3KEYFROMSQSENV \
                      VPCID=${VPC_ID}
-
-
 
 
 workflows: 

@@ -15,7 +15,8 @@ def lambda_handler(event, context):
     logger.info('## ENVIRONMENT VARIABLES')
     logger.info(os.environ)
     logger.info('## EVENT')
-    logger.info(event,context)
+    logger.info(event)
+    print("Lambda function memory limits in MB:",context.memory_limit_in_mb)
     connection = pymysql.connect(host=os.getenv('RDS_HOST'),
                                 user = os.getenv('RDS_USER'),
                                 password = os.getenv('RDS_PASSWORD'),
@@ -54,7 +55,7 @@ def lambda_handler(event, context):
                     ReceiptHandle= message['ReceiptHandle']
                 )
         # keep polling messages from SQS till there is no more messages left
-        client.receive_message(
+        response= client.receive_message(
                     QueueUrl = queueInfo['QueueUrl'],
                     AttributeNames=['All'],
                     MaxNumberOfMessages = 10
